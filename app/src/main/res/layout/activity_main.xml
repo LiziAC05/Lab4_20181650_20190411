@@ -4,15 +4,44 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/fondo_app"
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="68dp"
+        android:fontFamily="@font/calistoga"
+        android:text="Programa de Tutorías"
+        android:textAlignment="center"
+        android:textSize="48sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="296dp"
+        android:layout_height="109dp"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="57dp"
+        tools:layout_editor_absoluteY="434dp">
+
+        <Button
+            android:id="@+id/btnTutor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_button"
+            android:text="Tutor" />
+
+        <Button
+            android:id="@+id/btnTrabajador"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_button"
+            android:text="Trabajador" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
