@@ -11,23 +11,39 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="36dp"
         android:fontFamily="@font/calistoga"
         android:text="Programa de Tutorías"
         android:textAlignment="center"
+        android:textColor="#F6F6F6"
         android:textSize="48sp"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:layout_width="296dp"
-        android:layout_height="109dp"
+        android:layout_width="293dp"
+        android:layout_height="454dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="56dp"
+        android:layout_marginBottom="80dp"
         android:orientation="vertical"
-        tools:layout_editor_absoluteX="57dp"
-        tools:layout_editor_absoluteY="434dp">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="268dp"
+            app:srcCompat="@drawable/tutor" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="94dp" />
 
         <Button
             android:id="@+id/btnTutor"
