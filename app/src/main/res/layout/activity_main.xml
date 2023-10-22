@@ -23,8 +23,8 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:layout_width="293dp"
-        android:layout_height="454dp"
+        android:layout_width="284dp"
+        android:layout_height="483dp"
         android:layout_marginStart="56dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="56dp"
@@ -51,6 +51,10 @@
             android:layout_height="wrap_content"
             android:background="@drawable/custom_button"
             android:text="Tutor" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="16dp" />
 
         <Button
             android:id="@+id/btnTrabajador"
