@@ -24,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
     String canalTutor = "tutor";
     String canalTrabajador = "trabajador";
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
