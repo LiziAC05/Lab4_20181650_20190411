@@ -40,6 +40,7 @@ public class DescargaActivity extends AppCompatActivity {
     EmployeeService service;
 
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityDescargaBinding.inflate(getLayoutInflater());
@@ -48,11 +49,25 @@ public class DescargaActivity extends AppCompatActivity {
         initRetrofit();
 
         binding.btnDescargaLista.setOnClickListener(v -> {
+            // Obtener el valor del EditText
+            String codigoStr = binding.editTCodigo.getText().toString();
 
-                fetchEmployeesByManager(100);
+            // Comprobar si el EditText no está vacío
+            if (!codigoStr.isEmpty()) {
+                // Convertir la cadena a un entero
+                Integer codigo = Integer.parseInt(codigoStr);
 
+                // Mostrar el código en el log para verificación
+                Log.d("codigo", String.valueOf(codigo));
+
+                // Llamar al método para buscar empleados por managerId
+                fetchEmployeesByManager(codigo);
+            } else {
+                Toast.makeText(DescargaActivity.this, "Por favor, ingrese un código", Toast.LENGTH_SHORT).show();
+            }
         });
     }
+
 
     private void initRetrofit() {
         Retrofit retrofit = new Retrofit.Builder()

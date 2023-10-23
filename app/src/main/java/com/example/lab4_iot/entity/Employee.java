@@ -1,5 +1,8 @@
 package com.example.lab4_iot.entity;
 
+import java.sql.Time;
+import java.sql.Timestamp;
+
 public class Employee {
 
     public int id;
@@ -7,13 +10,15 @@ public class Employee {
     public String last_name;
     public String email;
     public String phone_number;
-    public String hire_date;
+    public Timestamp hire_date; // Considere cambiar esto a un tipo compatible con Timestamp si es necesario
     public Job job_id;
-    public int salary;
+    public double salary; // Cambiado de int a double
     public Employee manager_id;
     public Department department_id;
     public int meeting;
-    public String meeting_date;
+    public Timestamp meeting_date; // Considere cambiar esto a un tipo compatible con Timestamp si es necesario
+
+    // Tus métodos getter y setter aquí
 
 
     public int getId() {
@@ -56,11 +61,11 @@ public class Employee {
         this.phone_number = phone_number;
     }
 
-    public String getHire_date() {
+    public Timestamp getHire_date() {
         return hire_date;
     }
 
-    public void setHire_date(String hire_date) {
+    public void setHire_date(Timestamp hire_date) {
         this.hire_date = hire_date;
     }
 
@@ -72,11 +77,11 @@ public class Employee {
         this.job_id = job_id;
     }
 
-    public int getSalary() {
+    public double getSalary() {
         return salary;
     }
 
-    public void setSalary(int salary) {
+    public void setSalary(double salary) {
         this.salary = salary;
     }
 
@@ -104,11 +109,12 @@ public class Employee {
         this.meeting = meeting;
     }
 
-    public String getMeeting_date() {
+    public Timestamp getMeeting_date() {
         return meeting_date;
     }
 
-    public void setMeeting_date(String meeting_date) {
+    public void setMeeting_date(Timestamp meeting_date) {
         this.meeting_date = meeting_date;
     }
 }
+
