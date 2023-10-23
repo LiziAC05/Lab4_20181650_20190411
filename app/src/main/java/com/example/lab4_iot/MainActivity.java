@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, canalTutor)
-                .setSmallIcon(R.drawable.baseline_radio_24)
+                .setSmallIcon(R.drawable.tutor)
                 .setContentText("Está entrando en modo Tutor")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentIntent(pendingIntent)
@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, canalTrabajador)
-                .setSmallIcon(R.drawable.baseline_radio_24)
+                .setSmallIcon(R.drawable.tutor)
                 .setContentText("Está entrando en modo Empleado")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentIntent(pendingIntent)
