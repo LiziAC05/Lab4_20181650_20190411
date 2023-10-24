@@ -71,8 +71,8 @@ public class BuscaWorkerActivity extends AppCompatActivity {
                     List<Employee> employees = response.body();
                     if (!employees.isEmpty()) {
                         // Guardar en un archivo .txt
-                        saveEmployeeInfoToFile(employees);
-                        saveEmployeeInfoToMediaStore(employees);
+                        saveEmployeeInfoToFile(employees, employeeId);
+                        saveEmployeeInfoToMediaStore(employees, employeeId);
                     } else {
                         Toast.makeText(BuscaWorkerActivity.this, "Empleado no encontrado", Toast.LENGTH_SHORT).show();
                     }
@@ -88,9 +88,9 @@ public class BuscaWorkerActivity extends AppCompatActivity {
         });
     }
 
-    private void saveEmployeeInfoToFile(List<Employee> employees) {
+    private void saveEmployeeInfoToFile(List<Employee> employees, int employeeId) {
         try {
-            String filename = "info_empleado.txt";
+            String filename = "info_empleado(" + employeeId + ").txt";
             File directory = getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
             File file = new File(directory, filename);
             BufferedWriter bw = new BufferedWriter(new FileWriter(file));
@@ -106,10 +106,9 @@ public class BuscaWorkerActivity extends AppCompatActivity {
         }
     }
 
-
-    private void saveEmployeeInfoToMediaStore(List<Employee> employees) {
+    private void saveEmployeeInfoToMediaStore(List<Employee> employees, int employeeId) {
         try {
-            String filename = "info_empleado.txt";
+            String filename = "info_empleado(" + employeeId + ").txt";
             ContentValues values = new ContentValues();
             values.put(MediaStore.MediaColumns.DISPLAY_NAME, filename);
             values.put(MediaStore.MediaColumns.MIME_TYPE, "text/plain");
@@ -135,4 +134,5 @@ public class BuscaWorkerActivity extends AppCompatActivity {
             Toast.makeText(this, "Error al guardar archivo en MediaStore", Toast.LENGTH_SHORT).show();
         }
     }
+
 }
