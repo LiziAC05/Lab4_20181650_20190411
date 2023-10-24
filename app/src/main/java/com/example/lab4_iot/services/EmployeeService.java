@@ -27,6 +27,12 @@ public interface EmployeeService {
     @POST("employees/updateFeedback")
     Call<ResponseBody> updateEmployeeFeedback(@Query("employeeId") int employeeId, @Query("feedback") String feedback);
 
+    @FormUrlEncoded
+    @POST("employees/updateMeeting")
+    Call<ResponseBody> updateEmployeeMeetingStatus(@Field("employeeId") Integer employeeId, @Field("managerId") Integer managerId);
+
+
+
 
 
 }
