@@ -75,7 +75,7 @@ public class DescargaActivity extends AppCompatActivity {
     }
     private void initRetrofit() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.0.142:8080/")
+                .baseUrl(AppConfigIp.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         service = retrofit.create(EmployeeService.class);
@@ -125,7 +125,7 @@ public class DescargaActivity extends AppCompatActivity {
                 OutputStream os = getContentResolver().openOutputStream(fileUri);
                 BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(os));
                 for (Employee employee : employees) {
-                    bw.write("ID: " + employee.id + ", Name: " + employee.first_name + " " + employee.last_name);
+                    bw.write("ID: " + employee.id + ", Name: " + employee.first_name + " " + employee.last_name+" correo:"+employee.email );
                     bw.newLine();
                 }
 

@@ -126,7 +126,7 @@ public class AsignarTutorActivity extends AppCompatActivity {
                 .readTimeout(15, TimeUnit.SECONDS);    // Configura un tiempo de espera de lectura
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.0.142:8080/")
+                .baseUrl(AppConfigIp.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient.build())
                 .build();
