@@ -146,7 +146,7 @@ public class TrabajadorActivity extends AppCompatActivity {
                 .readTimeout(15, TimeUnit.SECONDS);    // Configura un tiempo de espera de lectura
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(AppConfigIp.BASE_URL)
+                .baseUrl(AppConfigIp.BASE_URL )
                 .client(httpClient.build())  // Agrega el cliente personalizado a Retrofit
                 .build();
         service = retrofit.create(EmployeeService.class);

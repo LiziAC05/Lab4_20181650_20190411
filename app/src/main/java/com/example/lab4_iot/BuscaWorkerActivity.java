@@ -98,7 +98,9 @@ public class BuscaWorkerActivity extends AppCompatActivity {
                 bw.write("ID: " + employee.id + ", Name: " + employee.first_name + " " + employee.last_name);
                 bw.newLine();
             }
+
             bw.close();
+
             Toast.makeText(this, "Información de empleado guardada en: " + file.getAbsolutePath(), Toast.LENGTH_LONG).show();
         } catch (IOException e) {
             e.printStackTrace();

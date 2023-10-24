@@ -110,7 +110,7 @@ public class DescargaActivity extends AppCompatActivity {
 
             // Configurar los valores para guardar en el MediaStore
             ContentValues values = new ContentValues();
-            values.put(MediaStore.MediaColumns.DISPLAY_NAME, filename);
+            values.put(MediaStore.MediaColumns.DISPLAY_NAME , filename);
             values.put(MediaStore.MediaColumns.MIME_TYPE, "text/plain");
 
             // Android Q y versiones superiores: Guarda en el directorio "Documents" del MediaStore

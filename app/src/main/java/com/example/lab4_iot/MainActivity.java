@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initRetrofit() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(AppConfigIp.BASE_URL)
+                .baseUrl(AppConfigIp.BASE_URL )
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         service = retrofit.create(EmployeeService.class);

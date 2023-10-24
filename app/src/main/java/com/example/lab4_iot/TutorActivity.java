@@ -12,7 +12,7 @@ public class TutorActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tutor);
+        setContentView(R.layout.activity_tutor );
         Button descarga = findViewById(R.id.btnDownloadList);
         Button trabajador = findViewById(R.id.btnSearchW);
         Button asignar = findViewById(R.id.btnAsignTutor);
