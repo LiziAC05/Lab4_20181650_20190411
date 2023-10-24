@@ -10,10 +10,13 @@ import androidx.core.content.ContextCompat;
 import android.Manifest.permission;
 
 
+import android.content.ContentValues;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -23,9 +26,12 @@ import com.example.lab4_iot.databinding.ActivityDescargaBinding;
 import com.example.lab4_iot.entity.Employee;
 import com.example.lab4_iot.services.EmployeeService;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.List;
 
@@ -67,8 +73,6 @@ public class DescargaActivity extends AppCompatActivity {
             }
         });
     }
-
-
     private void initRetrofit() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://192.168.0.142:8080/")
@@ -76,32 +80,16 @@ public class DescargaActivity extends AppCompatActivity {
                 .build();
         service = retrofit.create(EmployeeService.class);
     }
-
-    private boolean hasPermission(String permission) {
-
-        return android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED;
-    }
-
-    private void requestPermission(String permission, int requestCode) {
-        ActivityCompat.requestPermissions(this, new String[]{permission}, requestCode);
-        Toast.makeText(this, "No tiene permisos", Toast.LENGTH_SHORT).show();
-    }
-
     private void fetchEmployeesByManager(int managerId) {
         Call<List<Employee>> call = service.getEmployeesByManager(managerId);
         call.enqueue(new Callback<List<Employee>>() {
             @Override
             public void onResponse(Call<List<Employee>> call, Response<List<Employee>> response) {
                 if (response.isSuccessful()) {
-                    // Obtener la lista de empleados de la respuesta
                     List<Employee> employees = response.body();
-                    //Si llega . Bien
-                    // Imprimir la lista para verificación
-                    for (Employee employee : employees) {
-                        Log.d("EmployeeInfo", "ID: " + employee.id + ", Name: " + employee.first_name + " " + employee.last_name);
-                    }
-
-                    Toast.makeText(DescargaActivity.this, "Archivo descargado y guardado", Toast.LENGTH_SHORT).show();
+                    saveToFile(employees);  // Save using MediaStore
+                    saveToFile2(employees); // Save using File API
+                    Toast.makeText(DescargaActivity.this, "Archivo descargado y guardado en ambas ubicaciones", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(DescargaActivity.this, "Error en la respuesta de la API", Toast.LENGTH_SHORT).show();
                 }
@@ -114,36 +102,75 @@ public class DescargaActivity extends AppCompatActivity {
         });
     }
 
-    private void writeListToTxtFile(List<Employee> employees) {
+
+    private void saveToFile(List<Employee> employees) {
         try {
-            File file = createOrGetFile("employees.txt");
-            writeToFile(file, employees);
+            // Definir el nombre del archivo
+            String filename = "empleados.txt";
+
+            // Configurar los valores para guardar en el MediaStore
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.MediaColumns.DISPLAY_NAME, filename);
+            values.put(MediaStore.MediaColumns.MIME_TYPE, "text/plain");
+
+            // Android Q y versiones superiores: Guarda en el directorio "Documents" del MediaStore
+            values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOCUMENTS);
+
+            // Obtener la URI del MediaStore para guardar el archivo
+            Uri externalContentUri = MediaStore.Files.getContentUri("external");
+            Uri fileUri = getContentResolver().insert(externalContentUri, values);
+
+            if (fileUri != null) {
+                // Usar un OutputStream para escribir en la URI
+                OutputStream os = getContentResolver().openOutputStream(fileUri);
+                BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(os));
+                for (Employee employee : employees) {
+                    bw.write("ID: " + employee.id + ", Name: " + employee.first_name + " " + employee.last_name);
+                    bw.newLine();
+                }
+
+                // Cerrar el BufferedWriter y OutputStream
+                bw.close();
+                if (os != null) {
+                    os.close();
+                }
+
+                Toast.makeText(this, "Archivo guardado en: " + fileUri.toString(), Toast.LENGTH_LONG).show();
+            }
         } catch (IOException e) {
-            Log.e("WriteToFile", "Error al exportar archivo", e);
-            Toast.makeText(this, "Error al exportar archivo", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+            Toast.makeText(this, "Error al guardar archivo", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private File createOrGetFile(String fileName) throws IOException {
-        File file = new File(getExternalFilesDir(null), fileName);
-        if (!file.exists()) {
-            file.createNewFile();
-        }
-        return file;
-    }
+    private void saveToFile2(List<Employee> employees) {
+        try {
+            // Definir el nombre del archivo
+            String filename = "empleados.txt";
 
-    private void writeToFile(File file, List<Employee> employees) throws IOException {
-        try (FileOutputStream fos = new FileOutputStream(file);
-             OutputStreamWriter writer = new OutputStreamWriter(fos)) {
+            // Obtener el directorio donde guardar el archivo
+            File directory = getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
+            File file = new File(directory, filename);
 
+            // Usar un BufferedWriter para escribir en el archivo
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file));
             for (Employee employee : employees) {
-                String employeeData = String.format("%s, %s, %s%n", employee.id, employee.first_name, employee.last_name);
-                writer.write(employeeData);
+                bw.write("ID: " + employee.id + ", Name: " + employee.first_name + " " + employee.last_name);
+                bw.newLine();
             }
 
-            writer.flush();
-            Toast.makeText(this, "Archivo exportado correctamente", Toast.LENGTH_SHORT).show();
-            Log.d("WriteToFile", "Archivo exportado correctamente");
+            // Cerrar el BufferedWriter
+            bw.close();
+
+            Toast.makeText(this, "Archivo guardado en: " + file.getAbsolutePath(), Toast.LENGTH_LONG).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error al guardar archivo", Toast.LENGTH_SHORT).show();
         }
     }
+
+
+
+
+
 }
