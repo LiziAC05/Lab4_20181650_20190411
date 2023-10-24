@@ -18,18 +18,35 @@ import android.widget.Toast;
 
 import com.example.lab4_iot.databinding.ActivityDescargaBinding;
 import com.example.lab4_iot.databinding.ActivityTrabajadorBinding;
+import com.example.lab4_iot.services.EmployeeService;
+
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
+import okhttp3.ResponseBody;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class TrabajadorActivity extends AppCompatActivity {
 
     ActivityTrabajadorBinding binding;
+    EmployeeService service;
+
+    int codigoTrabajador;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityTrabajadorBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        initRetrofit();
         Intent intent = getIntent();
         boolean tieneMeetingDate = intent.getBooleanExtra("tieneMeetingDate", false);
-        int codigoTrabajador = intent.getIntExtra("codigoTrabajador", -1);
+        codigoTrabajador = intent.getIntExtra("codigoTrabajador", -1);
 
         // Aquí es donde decides si mostrar u ocultar el botón de feedback
         if (tieneMeetingDate) {
@@ -85,12 +102,55 @@ public class TrabajadorActivity extends AppCompatActivity {
     }
 
     private void handleFeedback(String feedback) {
-        // Tu lógica para manejar el feedback enviado
-        Toast.makeText(this, "Feedback enviado: " + feedback, Toast.LENGTH_SHORT).show();
+        if (codigoTrabajador == -1) {
+            Toast.makeText(this, "Error al obtener el código del trabajador", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Log.d("codigoTrabajador", String.valueOf(codigoTrabajador));
+        Log.d("feddback",feedback);
+        Call<ResponseBody> call = service.updateEmployeeFeedback(codigoTrabajador, feedback);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    try {
+                        String responseBody = response.body().string();
+                        Toast.makeText(TrabajadorActivity.this, responseBody, Toast.LENGTH_SHORT).show();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(TrabajadorActivity.this, "Error al enviar feedback", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(TrabajadorActivity.this, "Fallo en la conexión: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
     }
 
 
 
+    private void initRetrofit() {
+        // Interceptor de Logging para visualizar las peticiones y respuestas
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder()
+                .addInterceptor(logging)
+                .connectTimeout(15, TimeUnit.SECONDS)  // Configura un tiempo de espera de conexión
+                .readTimeout(15, TimeUnit.SECONDS);    // Configura un tiempo de espera de lectura
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://192.168.0.142:8080/")
+                .client(httpClient.build())  // Agrega el cliente personalizado a Retrofit
+                .build();
+        service = retrofit.create(EmployeeService.class);
+    }
 
 
 

@@ -147,6 +147,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
+
+
+
+
     public void notifyMeetingDate(Timestamp meetingDate) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         String strDate = dateFormat.format(meetingDate);
@@ -173,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initRetrofit() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.100.47.60:8080/")
+                .baseUrl("http://192.168.0.142:8080/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         service = retrofit.create(EmployeeService.class);

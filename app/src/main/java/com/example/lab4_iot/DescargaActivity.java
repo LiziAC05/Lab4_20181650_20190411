@@ -71,7 +71,7 @@ public class DescargaActivity extends AppCompatActivity {
 
     private void initRetrofit() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.100.47.60:8080/")
+                .baseUrl("http://192.168.0.142:8080/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         service = retrofit.create(EmployeeService.class);
